@@ -5,22 +5,26 @@ import { typeDefs } from "./typeDefs";
 import { resolvers } from "./resolvers";
 require("dotenv").config();
 
-const app = express();
+const startServer = async () => {
+  const app = express();
 
-mongoose.connect(
-  `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.cpets.mongodb.net/${process.env.DB_HOST}?retryWrites=true&w=majority`,
-  { useNewUrlParser: true, useUnifiedTopology: true }
-);
+  await mongoose.connect(
+    `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.cpets.mongodb.net/${process.env.DB_HOST}?retryWrites=true&w=majority`,
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  );
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
 
-server.applyMiddleware({ app });
+  server.applyMiddleware({ app });
 
-app.listen({ port: 4000 }, () => {
-  console.log(`
-    😁 Server is ready at http://localhost:4000${server.graphqlPath} 👍🏻
+  app.listen({ port: 4000 }, () => {
+    console.log(`
+    😁 Server is now ready at http://localhost:4000${server.graphqlPath} 👍🏻
   `);
-});
+  });
+};
+
+startServer();
