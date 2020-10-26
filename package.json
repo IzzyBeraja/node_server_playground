@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mikro-orm/cli": "^4.2.3",
     "@mikro-orm/core": "^4.2.3",
     "@mikro-orm/mongodb": "^4.2.3",
     "apollo-server-express": "^2.18.2",
