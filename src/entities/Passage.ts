@@ -1,9 +1,4 @@
-import {
-  Entity,
-  PrimaryKey,
-  Property,
-  SerializedPrimaryKey,
-} from "@mikro-orm/core";
+import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
 import { ObjectId } from "@mikro-orm/mongodb";
 import { Field, ObjectType } from "type-graphql";
 
@@ -16,11 +11,11 @@ export class Passage {
 
   @Field()
   @Property()
-  text: string;
+  text!: string;
 
   @Field()
   @Property()
-  author!: string;
+  author: string;
 
   @Field()
   @Property()
