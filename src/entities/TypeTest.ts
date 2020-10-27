@@ -5,9 +5,10 @@ import {
   SerializedPrimaryKey,
 } from "@mikro-orm/core";
 import { ObjectId } from "@mikro-orm/mongodb";
+import { Passage } from "./Passage";
 
 @Entity()
-export class Post {
+export class TypeTest {
   @PrimaryKey()
   _id: ObjectId;
 
@@ -15,11 +16,14 @@ export class Post {
   id!: string;
 
   @Property()
-  createdAt = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt = new Date();
+  userName: string;
 
   @Property()
-  title!: string;
+  text: Passage;
+
+  @Property()
+  completionDate = new Date();
+
+  @Property()
+  answers: string[];
 }

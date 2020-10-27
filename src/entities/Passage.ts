@@ -7,7 +7,7 @@ import {
 import { ObjectId } from "@mikro-orm/mongodb";
 
 @Entity()
-export class Post {
+export class Passage {
   @PrimaryKey()
   _id: ObjectId;
 
@@ -15,11 +15,11 @@ export class Post {
   id!: string;
 
   @Property()
-  createdAt = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt = new Date();
+  text: string;
 
   @Property()
-  title!: string;
+  author!: string;
+
+  @Property()
+  contributor: string;
 }
