@@ -1,9 +1,21 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  SerializedPrimaryKey,
+} from "@mikro-orm/core";
+import { ObjectId } from "@mikro-orm/mongodb";
 
 @Entity()
 export class Post {
   @PrimaryKey()
-  id!: number;
+  _id: ObjectId;
+
+  @SerializedPrimaryKey()
+  id!: string;
+
+  @Property({ type: "timestamp" })
+  random: number;
 
   @Property()
   createdAt = new Date();
