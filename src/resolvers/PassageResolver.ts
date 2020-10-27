@@ -46,4 +46,12 @@ export class PassageResolver {
     await em.persistAndFlush(passage);
     return passage;
   }
+
+  @Mutation(() => Boolean)
+  async deletePassage(
+    @Arg("id", () => String) _id: ObjectId,
+    @Ctx() { em }: MyContext
+  ): Promise<Boolean> {
+    return !!(await em.nativeDelete(Passage, { _id }));
+  }
 }
