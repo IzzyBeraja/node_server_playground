@@ -11,13 +11,13 @@ export class Passage {
 
   @Field()
   @Property()
-  text!: string;
+  text: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
   author: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Property()
   contributor: string;
 
