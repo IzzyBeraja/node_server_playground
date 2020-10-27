@@ -12,18 +12,31 @@ export class PostResolver {
 
   @Query(() => Post, { nullable: true })
   post(
-    @Arg("id", () => String) id: ObjectId,
+    @Arg("id", () => String) _id: ObjectId,
     @Ctx() { em }: MyContext
   ): Promise<Post | null> {
-    return em.findOne(Post, { _id: id });
+    return em.findOne(Post, { _id });
   }
 
   @Mutation(() => Post)
-  async creatPost(
+  async createPost(
     @Arg("title") title: string,
     @Ctx() { em }: MyContext
   ): Promise<Post> {
     const post = em.create(Post, { title });
+    await em.persistAndFlush(post);
+    return post;
+  }
+
+  @Mutation(() => Post, { nullable: true })
+  async updatePost(
+    @Arg("id", () => String) _id: ObjectId,
+    @Arg("title") title: string,
+    @Ctx() { em }: MyContext
+  ): Promise<Post | null> {
+    const post = await em.findOne(Post, { _id });
+    if (!post) return null;
+    post.title = title;
     await em.persistAndFlush(post);
     return post;
   }
