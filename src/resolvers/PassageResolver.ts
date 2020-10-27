@@ -1,5 +1,5 @@
 import { ObjectId } from "@mikro-orm/mongodb";
-import { Arg, Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Passage } from "../entities/Passage";
 import { MyContext } from "../types";
 
@@ -16,5 +16,15 @@ export class PassageResolver {
     @Ctx() { em }: MyContext
   ): Promise<Passage | null> {
     return em.findOne(Passage, { _id: id });
+  }
+
+  @Mutation(() => Passage)
+  async createPassage(
+    @Arg("text") text: string,
+    @Ctx() { em }: MyContext
+  ): Promise<Passage> {
+    const passage = em.create(Passage, { text });
+    await em.persistAndFlush(passage);
+    return passage;
   }
 }
