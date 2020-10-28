@@ -4,7 +4,7 @@ import { MikroORM } from "@mikro-orm/core";
 import mikroOrmConfig from "./mikro-orm.config";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import resolvers from "./resolvers";
+import resolvers from "./resolvers/allResolvers";
 
 const startServer = async () => {
   const { em } = await MikroORM.init(mikroOrmConfig);
@@ -21,7 +21,7 @@ const startServer = async () => {
 
   apolloServer.applyMiddleware({ app });
 
-  const port = 4000;
+  const port = 5055;
   app.listen({ port }, () => {
     console.info(`\n😁 Server is now ready at http://localhost:${port} 👍🏻\n`);
   });
