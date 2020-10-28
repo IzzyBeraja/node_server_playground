@@ -1,7 +1,13 @@
+import { Resolvers } from "../types";
 import { HelloResolver } from "./helloResolver";
 import { PostResolver } from "./PostResolver";
 import { PassageResolver } from "./PassageResolver";
-import { Resolvers } from "../types";
+import { UserResolver } from "./UserResolver";
 
-const Resolvers: Resolvers = [HelloResolver, PostResolver, PassageResolver];
+const Resolvers: Resolvers = [
+  HelloResolver,
+  PostResolver,
+  PassageResolver,
+  UserResolver,
+];
 export default Resolvers;
