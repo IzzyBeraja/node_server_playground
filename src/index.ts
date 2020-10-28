@@ -4,24 +4,16 @@ import { MikroORM } from "@mikro-orm/core";
 import mikroOrmConfig from "./mikro-orm.config";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./resolvers/helloResolver";
-import { PostResolver } from "./resolvers/PostResolver";
-import { PassageResolver } from "./resolvers/PassageResolver";
+import resolvers from "./resolvers";
 
 const startServer = async () => {
   const { em } = await MikroORM.init(mikroOrmConfig);
 
   const app = express();
-  //   const post = em.create(Passage, {
-  //     author: "Izzy",
-  //     contributor: "Izzy B",
-  //     text: "Sup Fam this is a passage",
-  //   });
-  //   await em.persistAndFlush(post);
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver, PassageResolver],
+      resolvers,
       validate: false,
     }),
     context: () => ({ em }),
