@@ -39,12 +39,21 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  //= Register User =//
   @Mutation(() => UserResponse)
   async registerUser(
     @Arg("options") { username, password }: UsernamePasswordInput,
     @Ctx() { em }: Context
   ): Promise<UserResponse> {
-    //* Check for user, otherwise hash and pass
+    if (username.length <= 2)
+      return {
+        errors: [
+          {
+            field: username,
+            message: "Invalid username length. (Minimum 3 characters)",
+          },
+        ],
+      };
     if (await em.findOne(User, { username }))
       return {
         errors: [{ field: "username", message: "User is already registered." }],
@@ -55,6 +64,7 @@ export class UserResolver {
     return { user };
   }
 
+  //= Login User =//
   @Mutation(() => UserResponse)
   async loginUser(
     @Arg("options") { username, password }: UsernamePasswordInput,
