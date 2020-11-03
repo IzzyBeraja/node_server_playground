@@ -6,9 +6,12 @@ import {
   EntitySchema,
 } from "@mikro-orm/core";
 import { EntityClass, EntityClassGroup } from "@mikro-orm/core/typings";
+import { Request, Response } from "express";
 
 export type Context = {
   em: EntityManager<any> & EntityManager<IDatabaseDriver<Connection>>;
+  req: Request;
+  res: Response;
 };
 
 export type Resolvers =

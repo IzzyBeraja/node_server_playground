@@ -8,6 +8,8 @@ import resolvers from "./resolvers/allResolvers";
 import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
+import { __prod__, __redisSecret__ } from "./constants";
+import { Context } from "./types";
 
 const startServer = async () => {
   const { em } = await MikroORM.init(mikroOrmConfig);
@@ -18,8 +20,15 @@ const startServer = async () => {
   const redisClient = redis.createClient();
   app.use(
     session({
-      store: new RedisStore({ client: redisClient }),
-      secret: "keyboard cat",
+      name: "qid",
+      store: new RedisStore({ client: redisClient, disableTouch: true }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+        httpOnly: true,
+        sameSite: "lax",
+        secure: __prod__, // cookie only works in https
+      },
+      secret: __redisSecret__ || "redis secret",
       resave: false,
     })
   );
@@ -29,7 +38,7 @@ const startServer = async () => {
       resolvers,
       validate: false,
     }),
-    context: () => ({ em }),
+    context: ({ req, res }): Context => ({ em, req, res }),
   });
 
   apolloServer.applyMiddleware({ app });
