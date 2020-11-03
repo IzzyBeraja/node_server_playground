@@ -7,6 +7,7 @@ import {
   InputType,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
 } from "type-graphql";
 import bcrypt from "bcrypt";
@@ -43,7 +44,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async registerUser(
     @Arg("options") { username, password }: UsernamePasswordInput,
-    @Ctx() { em }: Context
+    @Ctx() { em, req }: Context
   ): Promise<UserResponse> {
     if (username.length <= 2)
       return {
@@ -61,6 +62,7 @@ export class UserResolver {
     const hash = await bcrypt.hash(password, saltRounts);
     const user = em.create(User, { username, password: hash });
     await em.persistAndFlush(user);
+    req.session!.userId = user._id; // This will set cookie and auto-login on register
     return { user };
   }
 
@@ -68,7 +70,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async loginUser(
     @Arg("options") { username, password }: UsernamePasswordInput,
-    @Ctx() { em }: Context
+    @Ctx() { em, req }: Context
   ): Promise<UserResponse> {
     const user = await em.findOne(User, { username });
     if (!user)
@@ -86,6 +88,17 @@ export class UserResolver {
         ],
       };
     await em.persistAndFlush(user);
+    req.session!.userId = user._id;
     return { user };
+  }
+
+  //= ME =//
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { em, req }: Context): Promise<User | null> {
+    if (!req.session!.userId) {
+      return null;
+    }
+    const user = await em.findOne(User, { _id: req.session!.userId });
+    return user;
   }
 }

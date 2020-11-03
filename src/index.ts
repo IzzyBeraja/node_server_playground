@@ -30,6 +30,7 @@ const startServer = async () => {
       },
       secret: __redisSecret__ || "redis secret",
       resave: false,
+      saveUninitialized: false,
     })
   );
 
@@ -45,7 +46,9 @@ const startServer = async () => {
 
   const port = 5055;
   app.listen({ port }, () => {
-    console.info(`\n😁 Server is now ready at http://localhost:${port} 👍🏻\n`);
+    console.info(
+      `\n😁 Server is now ready at http://localhost:${port}/graphql 👍🏻\n`
+    );
   });
 };
 
